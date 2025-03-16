@@ -1,0 +1,1 @@
+G:\10 - Workspace\dotNet Maui\MauiAppMinhasCompras\MauiAppMinhasCompras\MauiAppMinhasCompras.csproj;x64
