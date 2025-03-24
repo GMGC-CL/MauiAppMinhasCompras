@@ -182,3 +182,4 @@ G:\10 - Workspace\dotNet Maui\MauiAppMinhasCompras\MauiAppMinhasCompras\obj\Debu
 G:\10 - Workspace\dotNet Maui\MauiAppMinhasCompras\MauiAppMinhasCompras\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
 G:\10 - Workspace\dotNet Maui\MauiAppMinhasCompras\MauiAppMinhasCompras\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
 G:\10 - Workspace\dotNet Maui\MauiAppMinhasCompras\MauiAppMinhasCompras\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\ProjectArchitectures.txt
+G:\10 - Workspace\dotNet Maui\MauiAppMinhasCompras\MauiAppMinhasCompras\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\MauiAppMinhasCompras.sourcelink.json
