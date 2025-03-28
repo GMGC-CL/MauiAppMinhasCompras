@@ -78,29 +78,27 @@ namespace MauiAppMinhasCompras.Helpers
 
             var parametros = new List<object>();
 
-            // Filtro por categoria
+
             if (!string.IsNullOrEmpty(categoria))
             {
                 sql += " AND Categoria = ?";
                 parametros.Add(categoria);
             }
 
-            // Filtro por comprado
+
             if (comprado.HasValue)
             {
                 sql += " AND Comprado = ?";
-                parametros.Add(comprado.Value ? 1 : 0);  // Convertendo booleano para 1 ou 0
+                parametros.Add(comprado.Value ? 1 : 0);
             }
 
-            // Filtro por data (entre os períodos de início e fim)
+
             if (inicio != null && fim != null)
             {
                 sql += " AND DataCompra >= ? AND DataCompra <= ?";
                 parametros.Add(inicio);
                 parametros.Add(fim);
             }
-
-            // Aqui, adiciona outros filtros que você deseja, por exemplo, para data preenchida
 
             return _conn.QueryAsync<Produto>(sql, parametros.ToArray());
         }

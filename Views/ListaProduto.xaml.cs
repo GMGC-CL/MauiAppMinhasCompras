@@ -119,10 +119,7 @@ public partial class ListaProduto : ContentPage
         {
             Produto p = e.SelectedItem as Produto;
 
-            Navigation.PushAsync(new Views.EditarProduto
-            {
-                BindingContext = p,
-            });
+            Navigation.PushAsync(new Views.EditarProduto(p));
         }
         catch (Exception ex)
         {
@@ -143,15 +140,12 @@ public partial class ListaProduto : ContentPage
             lista.Clear();
             List<Produto> tmp;
 
-            // Verifica se a opção de "Data Preenchida" foi selecionada
             if (dataPreenchida == true)
             {
-                // Filtro para produtos com data preenchida (sem data em branco)
                 tmp = await App.Db.GetByDataPreenchida();
             }
             else
             {
-                // Caso contrário, aplica os filtros considerando as combinações
                 tmp = await App.Db.GetProdutosFiltrados(categoriaSelecionada, comprado, inicio, fim);
             }
 
@@ -167,24 +161,14 @@ public partial class ListaProduto : ContentPage
     {
         try
         {
-            // Limpa a lista de produtos
             lista.Clear();
 
-            // Recupera todos os produtos sem nenhum filtro
             List<Produto> tmp = await App.Db.GetAll();
             tmp.ForEach(i => lista.Add(i));
-
-            // Reseta os filtros de data
             dtp_inicio.Date = DateTime.Today;
             dtp_fim.Date = DateTime.Today;
-
-            // Reseta o filtro de categoria
             pck_categoria.SelectedItem = null;
-
-            // Reseta o filtro de "Comprado"
             chkComprado.IsChecked = false;
-
-            // Reseta o filtro de "Data Preenchida"
             chkDataPreenchida.IsChecked = false;
         }
         catch (Exception ex)

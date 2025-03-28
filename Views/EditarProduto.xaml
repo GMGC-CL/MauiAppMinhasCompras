@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiAppMinhasCompras.Views.EditarProduto"
-             Title="{Binding Descricao}">
+             Title="{Binding Produto.Descricao}">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Salvar" Clicked="ToolbarItem_Clicked" />
@@ -10,25 +10,27 @@
 
     <VerticalStackLayout Spacing="10" Padding="10">
         <Label Text="Descrição do Produto:" />
-        <Entry x:Name="txt_descricao" Text="{Binding Descricao}" />
-        
+        <Entry x:Name="txt_descricao" Text="{Binding Produto.Descricao}" />
+
         <Label Text="Categoria do Produto:" />
-        <Entry x:Name="txt_categoria" Text="{Binding Categoria}" />
+        <Picker x:Name="txt_categoria"
+                ItemsSource="{Binding ListaCategorias}"
+                SelectedItem="{Binding Produto.Categoria, Mode=TwoWay}" />
 
         <Label Text="Quantidade:" />
-        <Entry x:Name="txt_quantidade" Text="{Binding Quantidade}" Keyboard="Numeric" />
+        <Entry x:Name="txt_quantidade" Text="{Binding Produto.Quantidade}" Keyboard="Numeric" />
 
         <Label Text="Preço Unitário:" />
-        <Entry x:Name="txt_preco" Text="{Binding Preco}" Keyboard="Numeric" />
+        <Entry x:Name="txt_preco" Text="{Binding Produto.Preco}" Keyboard="Numeric" />
 
         <Label Text="Comprado:" />
         <CheckBox x:Name="chk_comprado"
-                  IsChecked="{Binding Comprado, Mode=TwoWay}"
+                  IsChecked="{Binding Produto.Comprado, Mode=TwoWay}"
                   CheckedChanged="CheckBox_CheckedChanged" />
 
         <Label Text="Data da Compra:" />
         <DatePicker x:Name="dtp_dataCompra"
-                    Date="{Binding DataCompra, Mode=TwoWay}"
-                    IsEnabled="{Binding Comprado}" Format="dd/MM/yyyy"/>
+                    Date="{Binding Produto.DataCompra, Mode=TwoWay}"
+                    IsEnabled="{Binding Produto.Comprado}" Format="dd/MM/yyyy"/>
     </VerticalStackLayout>
 </ContentPage>
