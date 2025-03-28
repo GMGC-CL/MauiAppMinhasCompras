@@ -19,14 +19,15 @@ public partial class ListaProduto : ContentPage
         try
         {
             lista.Clear();
-
             List<Produto> tmp = await App.Db.GetAll();
-
             tmp.ForEach(i => lista.Add(i));
+
+            var categorias = tmp.Select(p => p.Categoria).Distinct().ToList();
+            pck_categoria.ItemsSource = categorias;
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ops", ex.Message, "OK");
+            await DisplayAlert("Erro", ex.Message, "OK");
         }
     }
 
@@ -49,6 +50,8 @@ public partial class ListaProduto : ContentPage
         {
             string q = e.NewTextValue;
 
+            lst_produtos.IsRefreshing = true;
+
             lista.Clear();
 
             List<Produto> tmp = await App.Db.Search(q);
@@ -59,6 +62,10 @@ public partial class ListaProduto : ContentPage
         {
             await DisplayAlert("Ops", ex.Message, "OK");
         }
+        finally
+        {
+            lst_produtos.IsRefreshing = false;
+        }
     }
 
     private void ToolbarItem_Clicked_1(object sender, EventArgs e)
@@ -68,6 +75,19 @@ public partial class ListaProduto : ContentPage
         string msg = $"O total é {soma:C}";
 
         DisplayAlert("Total dos Produtos", msg, "OK");
+    }
+
+    private void ToolbarItem_Clicked_2(object sender, EventArgs e)
+    {
+        try
+        {
+            Navigation.PushAsync(new Views.RelatorioCategoria());
+
+        }
+        catch (Exception ex)
+        {
+            DisplayAlert("Ops", ex.Message, "OK");
+        }
     }
 
     private async void MenuItem_Clicked(object sender, EventArgs e)
@@ -107,6 +127,54 @@ public partial class ListaProduto : ContentPage
         catch (Exception ex)
         {
             DisplayAlert("Ops", ex.Message, "OK");
+        }
+    }
+
+    private async void FiltrarProdutos(object sender, EventArgs e)
+    {
+        try
+        {
+            DateTime inicio = dtp_inicio.Date;
+            DateTime fim = dtp_fim.Date;
+            string categoriaSelecionada = pck_categoria.SelectedItem as string;
+            bool? comprado = chkComprado.IsChecked; // CheckBox define o filtro
+
+            lista.Clear();
+            List<Produto> tmp;
+
+            if (!string.IsNullOrEmpty(categoriaSelecionada))
+            {
+                tmp = await App.Db.GetByCategoria(categoriaSelecionada, comprado);
+            }
+            else
+            {
+                tmp = await App.Db.GetByPeriodo(inicio, fim, comprado);
+            }
+
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erro", ex.Message, "OK");
+        }
+    }
+
+    private async void LimparFiltros(object sender, EventArgs e)
+    {
+        try
+        {
+            lista.Clear();
+            List<Produto> tmp = await App.Db.GetAll();
+            tmp.ForEach(i => lista.Add(i));
+
+            dtp_inicio.Date = DateTime.Today;
+            dtp_fim.Date = DateTime.Today;
+            pck_categoria.SelectedItem = null;
+            chkComprado.IsChecked = false;
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erro", ex.Message, "OK");
         }
     }
 }

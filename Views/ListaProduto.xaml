@@ -5,40 +5,80 @@
              Title="Minhas Compras">
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Relatório por Categoria" Clicked="ToolbarItem_Clicked_2" />
         <ToolbarItem Text="Somar" Clicked="ToolbarItem_Clicked_1" />
         <ToolbarItem Text="Adicionar" Clicked="ToolbarItem_Clicked" />
     </ContentPage.ToolbarItems>
-    
-    <VerticalStackLayout>
-        <SearchBar x:Name="txt_search" 
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        <SearchBar x:Name="txt_search"
+                   Margin="0, 0, 0, 0"
                    Placeholder="Busca de Produtos"
                    TextChanged="txt_search_TextChanged"/>
-        <ListView x:Name="lst_produtos" ItemSelected="lst_produtos_ItemSelected">
-            <ListView.Header>
-                <Grid ColumnDefinitions="*, *, *, *, *">
-                    <Label Grid.Column="0" Text="ID" />
-                    <Label Grid.Column="1" Text="Descrição" />
-                    <Label Grid.Column="2" Text="Preço" />
-                    <Label Grid.Column="3" Text="Qnt" />
-                    <Label Grid.Column="4" Text="Total" />
-                </Grid>
-            </ListView.Header>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <ViewCell.ContextActions>
-                            <MenuItem Text="Remover" Clicked="MenuItem_Clicked" />
-                        </ViewCell.ContextActions>
-                        <Grid ColumnDefinitions="*, *, *, *, *">
-                            <Label Grid.Column="0" Text="{Binding Id}" />
-                            <Label Grid.Column="1" Text="{Binding Descricao}" />
-                            <Label Grid.Column="2" Text="{Binding Preco}" />
-                            <Label Grid.Column="3" Text="{Binding Quantidade}" />
-                            <Label Grid.Column="4" Text="{Binding Total}" />
-                        </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </VerticalStackLayout>
+
+        <Grid ColumnDefinitions="100,100,150,150,150,50,*" Padding="0" Margin="10">
+            <Label Grid.Column="0" Text="Início" Padding="5" FontAttributes="Bold" HorizontalOptions="End" />
+            <DatePicker Grid.Column="1"  x:Name="dtp_inicio" Date="{Binding DataInicio}" HorizontalOptions="Start" Format="dd/MM/yyyy"/>
+            <Label Grid.Column="2" Text="Fim" Padding="5" FontAttributes="Bold" HorizontalOptions="End"/>
+            <DatePicker Grid.Column="3" x:Name="dtp_fim" Date="{Binding DataFim}" HorizontalOptions="Start" Format="dd/MM/yyyy"/>
+            <Label Grid.Column="4" Text="Apenas Comprados" Padding="5" FontAttributes="Bold" VerticalOptions="Center"/>
+            <CheckBox Grid.Column="5" x:Name="chkComprado"/>
+            <Picker Grid.Column="6" x:Name="pck_categoria" Title="Categoria" FontAttributes="Bold" HorizontalOptions="Fill"/>
+        </Grid>
+
+        <Grid ColumnDefinitions="1*,30,1*" Padding="0" Margin="10" >
+            <Button Text="Filtrar" Clicked="FiltrarProdutos" Grid.Column="0" />
+            <Button Text="Limpar Filtros" Clicked="LimparFiltros" Grid.Column="2"/>
+        </Grid>
+
+        <Frame Padding="0" Margin="10" VerticalOptions="FillAndExpand">
+            <ListView x:Name="lst_produtos"
+                  IsPullToRefreshEnabled="True"
+                  ItemSelected="lst_produtos_ItemSelected">
+                <ListView.Header>
+                    <Grid ColumnDefinitions="30, 150, 100, 80, 50, 90, 100, 150"
+                          BackgroundColor="{StaticResource Gray100}">
+                        <Label Grid.Column="0" Text="ID" Padding="5" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="Descrição" FontAttributes="Bold" />
+                        <Label Grid.Column="2" Text="Categoria" FontAttributes="Bold" />
+                        <Label Grid.Column="3" Text="Preço" FontAttributes="Bold" />
+                        <Label Grid.Column="4" Text="Qnt" FontAttributes="Bold" />
+                        <Label Grid.Column="5" Text="Total" FontAttributes="Bold" />
+                        <Label Grid.Column="6" Text="Comprado" FontAttributes="Bold" />
+                        <Label Grid.Column="7" Text="Data da Compra" FontAttributes="Bold" />
+
+
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Remover" Clicked="MenuItem_Clicked" />
+                            </ViewCell.ContextActions>
+                            <Grid ColumnDefinitions="30, 150, 100, 80, 50, 90, 100, 150">
+                                <Label Grid.Column="0" Text="{Binding Id}" Padding="5" />
+                                <Label Grid.Column="1" Text="{Binding Descricao}" />
+                                <Label Grid.Column="2" Text="{Binding Categoria}" />
+                                <Label Grid.Column="3" Text="{Binding Preco, StringFormat='{}{0:c}'}" />
+                                <Label Grid.Column="4" Text="{Binding Quantidade}" />
+                                <Label Grid.Column="5" Text="{Binding Total, StringFormat='{}{0:c}'}" />
+                                <CheckBox Grid.Column="6" IsChecked="{Binding Comprado}" IsEnabled="False"/>
+                                <Label Grid.Column="7" Text="{Binding DataCompra, StringFormat='{0:dd/MM/yyyy}'}" />
+
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Frame>
+    </StackLayout>
 </ContentPage>

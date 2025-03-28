@@ -18,13 +18,10 @@ namespace MauiAppMinhasCompras.Helpers
             return _conn.InsertAsync(p);
         }
 
-        public Task<List<Produto>> Update(Produto p) 
-        {
-            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=? WHERE Id=?";
-
-            return _conn.QueryAsync<Produto>(
-                sql, p.Descricao, p.Quantidade, p.Preco, p.Id
-            );
+         public Task<int> Update(Produto p)
+        {         
+            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=?, DataCompra=?, Comprado=?, Categoria=? WHERE Id=?";
+            return _conn.ExecuteAsync(sql, p.Descricao, p.Quantidade, p.Preco, p.DataCompra, p.Comprado, p.Categoria, p.Id);
         }
 
         public Task<int> Delete(int id) 
@@ -42,6 +39,38 @@ namespace MauiAppMinhasCompras.Helpers
             string sql = "SELECT * FROM Produto WHERE descricao LIKE '%" + q + "%'";
 
             return _conn.QueryAsync<Produto>(sql);
+        }
+
+        public Task<List<Produto>> GetByPeriodo(DateTime inicio, DateTime fim, bool? comprado = null)
+        {
+            string sql = @"
+        SELECT * FROM Produto 
+        WHERE DataCompra IS NOT NULL 
+        AND DataCompra BETWEEN ? AND ?";
+
+            var parametros = new List<object> { inicio, fim };
+
+            if (comprado.HasValue)
+            {
+                sql += " AND Comprado = ?";
+                parametros.Add(comprado.Value ? 1 : 0);
+            }
+
+            return _conn.QueryAsync<Produto>(sql, parametros.ToArray());
+        }
+
+        public Task<List<Produto>> GetByCategoria(string categoria, bool? comprado = null)
+        {
+            string sql = "SELECT * FROM Produto WHERE Categoria = ?";
+            var parametros = new List<object> { categoria };
+
+            if (comprado.HasValue)
+            {
+                sql += " AND Comprado = ?";
+                parametros.Add(comprado.Value ? 1 : 0);
+            }
+
+            return _conn.QueryAsync<Produto>(sql, parametros.ToArray());
         }
     }
 }
