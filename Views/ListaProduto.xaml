@@ -24,15 +24,23 @@
                    Placeholder="Busca de Produtos"
                    TextChanged="txt_search_TextChanged"/>
 
-        <Grid ColumnDefinitions="100,100,150,150,150,50,*" Padding="0" Margin="10">
+        <Grid ColumnDefinitions="150,150,150,150,150,*" Padding="0" Margin="5">
             <Label Grid.Column="0" Text="Início" Padding="5" FontAttributes="Bold" HorizontalOptions="End" />
             <DatePicker Grid.Column="1"  x:Name="dtp_inicio" Date="{Binding DataInicio}" HorizontalOptions="Start" Format="dd/MM/yyyy"/>
             <Label Grid.Column="2" Text="Fim" Padding="5" FontAttributes="Bold" HorizontalOptions="End"/>
             <DatePicker Grid.Column="3" x:Name="dtp_fim" Date="{Binding DataFim}" HorizontalOptions="Start" Format="dd/MM/yyyy"/>
-            <Label Grid.Column="4" Text="Apenas Comprados" Padding="5" FontAttributes="Bold" VerticalOptions="Center"/>
-            <CheckBox Grid.Column="5" x:Name="chkComprado"/>
-            <Picker Grid.Column="6" x:Name="pck_categoria" Title="Categoria" FontAttributes="Bold" HorizontalOptions="Fill"/>
+            <Label Grid.Column="4" Text="Categoria" Padding="5" FontAttributes="Bold" HorizontalOptions="End"/>
+            <Picker Grid.Column="5" x:Name="pck_categoria" FontAttributes="Bold" HorizontalOptions="Fill"/>
+            
         </Grid>
+
+        <Grid ColumnDefinitions="150,150,150,150" Padding="0" Margin="5">
+            <Label Grid.Column="0" Text="Comprados" Padding="5" FontAttributes="Bold" VerticalOptions="Center"/>
+            <CheckBox Grid.Column="1" x:Name="chkComprado"/>
+            <Label Grid.Column="2" Text="Não Comprados" Padding="5" FontAttributes="Bold" VerticalOptions="Center"/>
+            <CheckBox Grid.Column="3" x:Name="chkDataPreenchida"/>
+        </Grid>
+
 
         <Grid ColumnDefinitions="1*,30,1*" Padding="0" Margin="10" >
             <Button Text="Filtrar" Clicked="FiltrarProdutos" Grid.Column="0" />

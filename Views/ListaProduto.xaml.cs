@@ -137,18 +137,22 @@ public partial class ListaProduto : ContentPage
             DateTime inicio = dtp_inicio.Date;
             DateTime fim = dtp_fim.Date;
             string categoriaSelecionada = pck_categoria.SelectedItem as string;
-            bool? comprado = chkComprado.IsChecked; // CheckBox define o filtro
+            bool? comprado = chkComprado.IsChecked;
+            bool? dataPreenchida = chkDataPreenchida.IsChecked;
 
             lista.Clear();
             List<Produto> tmp;
 
-            if (!string.IsNullOrEmpty(categoriaSelecionada))
+            // Verifica se a opção de "Data Preenchida" foi selecionada
+            if (dataPreenchida == true)
             {
-                tmp = await App.Db.GetByCategoria(categoriaSelecionada, comprado);
+                // Filtro para produtos com data preenchida (sem data em branco)
+                tmp = await App.Db.GetByDataPreenchida();
             }
             else
             {
-                tmp = await App.Db.GetByPeriodo(inicio, fim, comprado);
+                // Caso contrário, aplica os filtros considerando as combinações
+                tmp = await App.Db.GetProdutosFiltrados(categoriaSelecionada, comprado, inicio, fim);
             }
 
             tmp.ForEach(i => lista.Add(i));
@@ -163,14 +167,25 @@ public partial class ListaProduto : ContentPage
     {
         try
         {
+            // Limpa a lista de produtos
             lista.Clear();
+
+            // Recupera todos os produtos sem nenhum filtro
             List<Produto> tmp = await App.Db.GetAll();
             tmp.ForEach(i => lista.Add(i));
 
+            // Reseta os filtros de data
             dtp_inicio.Date = DateTime.Today;
             dtp_fim.Date = DateTime.Today;
+
+            // Reseta o filtro de categoria
             pck_categoria.SelectedItem = null;
+
+            // Reseta o filtro de "Comprado"
             chkComprado.IsChecked = false;
+
+            // Reseta o filtro de "Data Preenchida"
+            chkDataPreenchida.IsChecked = false;
         }
         catch (Exception ex)
         {

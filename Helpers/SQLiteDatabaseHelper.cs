@@ -59,18 +59,55 @@ namespace MauiAppMinhasCompras.Helpers
             return _conn.QueryAsync<Produto>(sql, parametros.ToArray());
         }
 
-        public Task<List<Produto>> GetByCategoria(string categoria, bool? comprado = null)
+        public Task<List<Produto>> GetByCategoria(string categoria)
         {
             string sql = "SELECT * FROM Produto WHERE Categoria = ?";
             var parametros = new List<object> { categoria };
 
+            return _conn.QueryAsync<Produto>(sql, parametros.ToArray());
+        }
+
+        public async Task<List<Produto>> GetByDataPreenchida()
+        {
+            return await _conn.Table<Produto>().Where(p => p.DataCompra == null).ToListAsync();
+        }
+
+        public Task<List<Produto>> GetProdutosFiltrados(string categoria, bool? comprado, DateTime inicio, DateTime fim)
+        {
+            string sql = "SELECT * FROM Produto WHERE 1=1";
+
+            var parametros = new List<object>();
+
+            // Filtro por categoria
+            if (!string.IsNullOrEmpty(categoria))
+            {
+                sql += " AND Categoria = ?";
+                parametros.Add(categoria);
+            }
+
+            // Filtro por comprado
             if (comprado.HasValue)
             {
                 sql += " AND Comprado = ?";
-                parametros.Add(comprado.Value ? 1 : 0);
+                parametros.Add(comprado.Value ? 1 : 0);  // Convertendo booleano para 1 ou 0
             }
+
+            // Filtro por data (entre os períodos de início e fim)
+            if (inicio != null && fim != null)
+            {
+                sql += " AND DataCompra >= ? AND DataCompra <= ?";
+                parametros.Add(inicio);
+                parametros.Add(fim);
+            }
+
+            // Aqui, adiciona outros filtros que você deseja, por exemplo, para data preenchida
 
             return _conn.QueryAsync<Produto>(sql, parametros.ToArray());
         }
+
     }
+
+
+
+
 }
