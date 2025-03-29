@@ -66,14 +66,12 @@ namespace MauiAppMinhasCompras.Helpers
 
             var parametros = new List<object>();
 
-            // Filtro por categoria
             if (!string.IsNullOrEmpty(categoria))
             {
                 sql += " AND Categoria = ?";
                 parametros.Add(categoria);
             }
 
-            // Filtro por Comprado e Não Comprado
             if (comprado == true)
             {
                 sql += " AND Comprado = ?";
@@ -88,7 +86,6 @@ namespace MauiAppMinhasCompras.Helpers
             {
             }
 
-            // Filtro por data (se as datas de início e fim forem fornecidas)
             if (inicio != null && fim != null)
             {
                 if (comprado == true)
