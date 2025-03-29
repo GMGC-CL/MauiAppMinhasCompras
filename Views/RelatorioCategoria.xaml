@@ -3,7 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiAppMinhasCompras.Views.RelatorioCategoria"
              Title="Relatório por Categoria">
-    
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Somar" Clicked="CalcularTotal" />
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Label">

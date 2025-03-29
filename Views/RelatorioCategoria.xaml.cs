@@ -47,6 +47,28 @@ public partial class RelatorioCategoria : ContentPage
         }
     }
 
+    private async void CalcularTotal(object sender, EventArgs e)
+    {
+        try
+        {
+            if (lst_produtos_categoria.ItemsSource is List<ProdutoCategoria> produtosAgrupados)
+            {
+                decimal soma = produtosAgrupados.Sum(p => p.PrecoTotal);
+
+                string msg = $"O total é {soma:C}";
+                await DisplayAlert("Total dos Produtos", msg, "OK");
+            }
+            else
+            {
+                await DisplayAlert("Aviso", "Nenhum produto encontrado!", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erro", ex.Message, "OK");
+        }
+    }
+
     public class ProdutoCategoria
     {
         public string Categoria { get; set; }

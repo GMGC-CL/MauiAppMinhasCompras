@@ -1,5 +1,6 @@
 using MauiAppMinhasCompras.Models;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace MauiAppMinhasCompras.Views;
 
@@ -135,19 +136,18 @@ public partial class ListaProduto : ContentPage
             DateTime fim = dtp_fim.Date;
             string categoriaSelecionada = pck_categoria.SelectedItem as string;
             bool? comprado = chkComprado.IsChecked;
-            bool? dataPreenchida = chkDataPreenchida.IsChecked;
+            bool? ncomprado = chkNComprado.IsChecked;
 
             lista.Clear();
             List<Produto> tmp;
 
-            if (dataPreenchida == true)
-            {
-                tmp = await App.Db.GetByDataPreenchida();
-            }
-            else
-            {
-                tmp = await App.Db.GetProdutosFiltrados(categoriaSelecionada, comprado, inicio, fim);
-            }
+            
+            tmp = await App.Db.GetProdutosFiltrados(categoriaSelecionada, comprado, ncomprado, inicio, fim);
+
+            Debug.WriteLine($"Produtos encontrados: {tmp.Count}");
+            tmp.ForEach(p =>
+                Debug.WriteLine($"Produto: {p.Descricao}, Comprado: {p.Comprado}, DataCompra: {p.DataCompra}")
+            );
 
             tmp.ForEach(i => lista.Add(i));
         }
@@ -169,7 +169,7 @@ public partial class ListaProduto : ContentPage
             dtp_fim.Date = DateTime.Today;
             pck_categoria.SelectedItem = null;
             chkComprado.IsChecked = false;
-            chkDataPreenchida.IsChecked = false;
+            chkNComprado.IsChecked = false;
         }
         catch (Exception ex)
         {

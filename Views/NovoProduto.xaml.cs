@@ -8,7 +8,7 @@ public partial class NovoProduto : ContentPage
     public NovoProduto()
     {
         InitializeComponent();
-        ListaCategorias = new List<string> { "Alimentos", "Bebidas", "Limpeza", "Higiene", "Outros" };
+        ListaCategorias = new List<string> { "Alimento", "Bebida", "Doce", "Ferramenta", "Higiene", "Limpeza", "Utensilio" };
         BindingContext = this; 
     }
 

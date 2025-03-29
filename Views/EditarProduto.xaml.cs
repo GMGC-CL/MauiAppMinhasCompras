@@ -12,7 +12,7 @@ public partial class EditarProduto : ContentPage
         InitializeComponent();
 
         Produto = produto;
-        ListaCategorias = new List<string> { "Alimentos", "Bebidas", "Limpeza", "Higiene", "Outros" };
+        ListaCategorias = new List<string> { "Alimento", "Bebida", "Doce", "Ferramenta", "Higiene", "Limpeza", "Utensilio" };
         BindingContext = this;
         txt_categoria.SelectedItem = Produto.Categoria;
     }

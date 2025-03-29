@@ -1,5 +1,6 @@
 ﻿using MauiAppMinhasCompras.Models;
 using SQLite;
+using System.Diagnostics;
 
 namespace MauiAppMinhasCompras.Helpers
 {
@@ -59,53 +60,62 @@ namespace MauiAppMinhasCompras.Helpers
             return _conn.QueryAsync<Produto>(sql, parametros.ToArray());
         }
 
-        public Task<List<Produto>> GetByCategoria(string categoria)
-        {
-            string sql = "SELECT * FROM Produto WHERE Categoria = ?";
-            var parametros = new List<object> { categoria };
-
-            return _conn.QueryAsync<Produto>(sql, parametros.ToArray());
-        }
-
-        public async Task<List<Produto>> GetByDataPreenchida()
-        {
-            return await _conn.Table<Produto>().Where(p => p.DataCompra == null).ToListAsync();
-        }
-
-        public Task<List<Produto>> GetProdutosFiltrados(string categoria, bool? comprado, DateTime inicio, DateTime fim)
+        public Task<List<Produto>> GetProdutosFiltrados(string categoria, bool? comprado, bool? ncomprado, DateTime inicio, DateTime fim)
         {
             string sql = "SELECT * FROM Produto WHERE 1=1";
 
             var parametros = new List<object>();
 
-
+            // Filtro por categoria
             if (!string.IsNullOrEmpty(categoria))
             {
                 sql += " AND Categoria = ?";
                 parametros.Add(categoria);
             }
 
-
-            if (comprado.HasValue)
+            // Filtro por Comprado e Não Comprado
+            if (comprado == true)
             {
                 sql += " AND Comprado = ?";
-                parametros.Add(comprado.Value ? 1 : 0);
+                parametros.Add(1);
+            }
+            else if (ncomprado == true)
+            {
+                sql += " AND Comprado = ?";
+                parametros.Add(0);
+            }
+            else
+            {
             }
 
-
+            // Filtro por data (se as datas de início e fim forem fornecidas)
             if (inicio != null && fim != null)
             {
-                sql += " AND DataCompra >= ? AND DataCompra <= ?";
-                parametros.Add(inicio);
-                parametros.Add(fim);
+                if (comprado == true)
+                {
+                    sql += " AND DataCompra >= ? AND DataCompra <= ?";
+                    parametros.Add(inicio);
+                    parametros.Add(fim);
+                }
+                else if (ncomprado == true)
+                {
+                    sql += " AND DataCompra IS NULL";
+                    parametros.Add(inicio);
+                    parametros.Add(fim);
+                }
+                else 
+                {
+                    sql += " AND (DataCompra >= ? AND DataCompra <= ? OR DataCompra IS NULL)";
+                    parametros.Add(inicio);
+                    parametros.Add(fim);
+                }
             }
 
+            Debug.WriteLine($"Consulta SQL: {sql}");
+            Debug.WriteLine($"Parâmetros: {string.Join(", ", parametros)}");
+
             return _conn.QueryAsync<Produto>(sql, parametros.ToArray());
+
         }
-
     }
-
-
-
-
 }
